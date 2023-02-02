@@ -1,22 +1,24 @@
 import React from "react";
-import { v4 as uuid } from "uuid";
+// DON'T DO THAT
+// use JS instead
+// import { v4 as uuid } from "uuid";
 import { useState } from "react";
 
 function TodoForm(props) {
   const [inputValue, setInputValue] = useState("");
 
-  const manageOnSubmit = (event) => {
+  const onSubmit = (event) => {
     event.preventDefault();
     const todo = {
       text: inputValue,
-      id: uuid(),
-      isComplete: false
+      id: crypto.randomUUID(),
+      isComplete: false,
     };
     props.onSubmit(todo);
     setInputValue("");
   };
   return (
-    <form onSubmit={manageOnSubmit}>
+    <form onSubmit={onSubmit}>
       <input
         type="text"
         value={inputValue}

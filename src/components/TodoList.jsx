@@ -7,7 +7,7 @@ function TodoList({ todos, handleDoubleClick, toggleCompleted }) {
         <li
           key={todo.id}
           onDoubleClick={() => handleDoubleClick(todo.id)}
-          onClick={toggleCompleted(todo.id)}
+          onClick={() => toggleCompleted(todo.id)}
           className={todo.isComplete ? "complete" : ""}
         >
           {todo.text}
