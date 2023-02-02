@@ -1,43 +1,42 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 import TodoList from "./components/TodoList";
 import TodoForm from "./components/TodoForm";
+import { useTodos } from "./hooks";
 
 function App() {
-  const [todos, setTodos] = useState(() => {
-    const localTodos = localStorage.getItem("todos");
-    return localTodos ? JSON.parse(localTodos) : [];
-  });
+  const [todos, setTodos] = useState([]);
+  const { getTodos, addTodo, updateTodo, removeTodo } = useTodos();
 
-  useEffect(() => {
-    localStorage.setItem("todos", JSON.stringify(todos));
-  }, [todos]);
+  const onFormSubmit = (todo) => {
+    addTodo(todo).then(() => {
+      getTodos().then(setTodos)
+    })
+  }
 
-  const addTodo = (newTodo) => {
-    setTodos([...todos, newTodo]);
-  };
-
-  const removeTodo = (id) => {
+  const removeTodoHandler = (id) => {
     console.log("test");
-    setTodos(todos.filter((todo) => todo.id !== id));
+    removeTodo(id).then(() => getTodos().then(setTodos))
   };
 
   const toggleCompleted = (id) => {
-    setTodos(
-      todos.map((todo) =>
-        todo.id === id ? { ...todo, isComplete: !todo.isComplete } : todo
-      )
-    );
+    const state = todos.find((todo) => todo.id === id);
+    state.isComplete = !state.isComplete;
+    updateTodo(id, state).then(() => getTodos().then(setTodos))
   };
+
+  useEffect(() => {
+    getTodos().then(setTodos)
+  }, [getTodos])
 
   return (
     <>
       <h1>Todo-App</h1>
       <div id="wrapper">
-        <TodoForm onSubmit={addTodo} />
+        <TodoForm onSubmit={onFormSubmit} />
         <TodoList
           todos={todos}
-          handleDoubleClick={removeTodo}
+          handleDoubleClick={removeTodoHandler}
           toggleCompleted={toggleCompleted}
         />
       </div>

@@ -10,9 +10,9 @@ function TodoForm(props) {
   const onSubmit = (event) => {
     event.preventDefault();
     const todo = {
-      text: inputValue,
-      id: crypto.randomUUID(),
+      title: inputValue,
       isComplete: false,
+      userId: 1
     };
     props.onSubmit(todo);
     setInputValue("");

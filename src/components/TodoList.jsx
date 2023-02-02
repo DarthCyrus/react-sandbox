@@ -1,19 +1,17 @@
-import React from "react";
+import React, { useMemo } from "react";
+import TodoItem from "./TodoItem";
 
 function TodoList({ todos, handleDoubleClick, toggleCompleted }) {
+  const todosRender = useMemo(() => todos.map((todo) => {
+      return <TodoItem
+              key={todo.id}
+              todo={todo}
+              handleDoubleClick={handleDoubleClick}
+              toggleCompleted={toggleCompleted} />
+    }), [todos, handleDoubleClick, toggleCompleted])
+  
   return (
-    <ul>
-      {todos.map((todo) => (
-        <li
-          key={todo.id}
-          onDoubleClick={() => handleDoubleClick(todo.id)}
-          onClick={() => toggleCompleted(todo.id)}
-          className={todo.isComplete ? "complete" : ""}
-        >
-          {todo.text}
-        </li>
-      ))}
-    </ul>
+    <ul>{todosRender}</ul>
   );
 }
 
